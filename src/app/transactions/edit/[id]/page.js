@@ -53,7 +53,7 @@ export default function EditTransactionPage() {
     e.preventDefault();
     try {
       await API.put(`/transactions/${id}`, form);
-      alert("Transaction updated successfully!");
+      alert("Transaksi berhasil diupdate!");
       router.push("/transactions");
     } catch (err) {
       console.error(err);

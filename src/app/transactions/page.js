@@ -58,70 +58,6 @@ export default function TransactionsPage() {
 
   let rowNumber = 1; // Initialize row number for transaction details
 
-  // const filteredRows = transactions.flatMap((tx) =>
-  //   tx.details
-  //     .filter(detail => {
-  //       const txDate = new Date(tx.date_paid);
-  //       const start = filters.start_date ? new Date(filters.start_date) : null;
-  //       const end = filters.end_date ? new Date(filters.end_date) : null;
-
-  //       const matchDate =
-  //         (!start || txDate >= start) &&
-  //         (!end || txDate <= end);
-
-  //       const matchCategory =
-  //         !filters.category || detail.category?.name === filters.category;
-
-  //       const search = filters.search.toLowerCase();
-  //       const matchSearch =
-  //         !filters.search ||
-  //         detail.name.toLowerCase().includes(search) ||
-  //         tx.description.toLowerCase().includes(search);
-
-  //       return matchDate && matchCategory && matchSearch;
-  //     })
-  //     .map((detail) => (
-  //       <tr key={`${tx.id}-${rowNumber}`} className="border-b hover:bg-gray-100 text-gray-900">
-  //         <td className="p-2 text-center">{rowNumber++}</td>
-  //         <td className="p-2 text-center">{tx.description}</td>
-  //         <td className="p-2 text-center">{tx.code}</td>
-  //         <td className="p-2 text-center">{new Intl.NumberFormat('eu-EU').format(tx.rate_euro)}</td>
-  //         <td className="p-2 text-center">{new Intl.DateTimeFormat('id-ID', {
-  //           year: 'numeric',
-  //           month: 'long',
-  //           day: '2-digit'
-  //           }).format(new Date(tx.date_paid))}</td>
-  //         <td className="p-2 text-center">{detail.category?.name}</td>
-  //         <td className="p-2 text-center">{detail.name}</td>
-  //         <td className="p-2 text-center">
-  //           {new Intl.NumberFormat('id-ID').format(detail.amount)}
-  //         </td>
-  //         <td className="p-2 text-center space-x-2 flex justify-end">
-  //             <button
-  //               title="Delete" className="text-red-600 hover:text-red-800"
-  //               onClick={() => handleDelete(tx.id)}
-  //             >
-  //               🗑️
-  //             </button>
-  //             <button
-  //               title="Edit" className="text-blue-600 hover:text-blue-800"
-  //               onClick={() => handleEdit(tx.id)}
-  //             >
-  //               ✏️
-  //             </button>
-  //         </td>
-  //       </tr>
-  //     ))
-  // );
-
-  // const [currentPage, setCurrentPage] = useState(1);
-  // const [pageSize, setPageSize] = useState(10); // default to 10 per page
-
-  // const paginatedRows = filteredRows.slice(
-  //   (currentPage - 1) * pageSize,
-  //   currentPage * pageSize
-  // );
-
   return (
     <div className="max-w-5xl mx-auto p-6">
       <div className="flex items-center justify-between mb-6">
@@ -236,7 +172,8 @@ export default function TransactionsPage() {
                       const matchSearch =
                         !filters.search ||
                         detail.name.toLowerCase().includes(search) ||
-                        tx.description.toLowerCase().includes(search);
+                        tx.description.toLowerCase().includes(search) ||
+                        tx.code.toLowerCase().includes(search);
 
                       return matchDate && matchCategory && matchSearch;
                     })
@@ -274,66 +211,11 @@ export default function TransactionsPage() {
                     ))
                 )}
 
-                  {/* {paginatedRows.map((row, index) => (
-                    <tr key={`${row.transaction.id}-${index}`} className="border-b hover:bg-gray-100 text-gray-900">
-                      <td className="p-2 text-center">{(currentPage - 1) * pageSize + index + 1}</td>
-                      <td className="p-2 text-center">{row.transaction.description}</td>
-                      <td className="p-2 text-center">{row.transaction.code}</td>
-                      <td className="p-2 text-center">
-                        {new Intl.NumberFormat('eu-EU').format(row.transaction.rate_euro)}
-                      </td>
-                      <td className="p-2 text-center">
-                        {new Intl.DateTimeFormat('id-ID', {
-                          year: 'numeric',
-                          month: 'long',
-                          day: '2-digit',
-                        }).format(new Date(row.transaction.date_paid))}
-                      </td>
-                      <td className="p-2 text-center">{row.category?.name}</td>
-                      <td className="p-2 text-center">{row.name}</td>
-                      <td className="p-2 text-center">
-                        {new Intl.NumberFormat('id-ID').format(row.amount)}
-                      </td>
-                      <td className="p-2 text-center space-x-2 flex justify-end">
-                        <button
-                          title="Delete"
-                          className="text-red-600 hover:text-red-800"
-                          onClick={() => handleDelete(row.transaction.id)}
-                        >
-                          🗑️
-                        </button>
-                        <button
-                          title="Edit"
-                          className="text-blue-600 hover:text-blue-800"
-                          onClick={() => handleEdit(row.transaction.id)}
-                        >
-                          ✏️
-                        </button>
-                      </td>
-                    </tr>
-                  ))} */}
               </tbody>
             </table>
           </div>
         </div>
       )}
-
-      {/* <div className="flex items-center gap-2 mb-4">
-        <label className="text-sm">Show</label>
-        <select
-          value={pageSize}
-          onChange={(e) => {
-            setPageSize(parseInt(e.target.value));
-            setCurrentPage(1); // reset to page 1 when page size changes
-          }}
-          className="border rounded p-1"
-        >
-          {[5, 10, 15, 20, 50].map(size => (
-            <option key={size} value={size}>{size}</option>
-          ))}
-        </select>
-        <span className="text-sm">entries</span>
-      </div> */}
     </div>
   );
 }
