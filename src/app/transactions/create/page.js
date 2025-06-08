@@ -52,7 +52,7 @@ export default function CreateTransactionPage() {
     e.preventDefault();
     try {
       await API.post('/transactions', form);
-      alert('Transaction created successfully');
+      alert('Transaksi berhasil disimpan!');
       router.push('/transactions');
     } catch (err) {
       console.error(err);
