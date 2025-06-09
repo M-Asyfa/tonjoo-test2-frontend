@@ -26,12 +26,12 @@ export default function TransactionsPage() {
 
     try {
       await API.delete(`/transactions/${transactionId}`);
-      alert("Deleted successfully!");
+      alert("Transaksi berhasil dihapus!");
       // Optionally reload data:
       setTransactions((prev) => prev.filter((t) => t.id !== transactionId));
     } catch (err) {
       console.error("Delete failed:", err);
-      alert("Failed to delete transaction.");
+      alert("Gagal menghapus transaksi.");
     }
   };
 
@@ -67,6 +67,8 @@ export default function TransactionsPage() {
       {transactions.length === 0 ? (
         <p className="text-gray-500">Tidak ada transaksi.</p>
       ) : (
+        
+        
         <div className="">
           <div className="bg-white border shadow p-4">
             <div className="flex justify-end mb-6">
@@ -130,11 +132,11 @@ export default function TransactionsPage() {
               </div>
             </div>
 
-            <Link href="/transactions/create">
+            {/* <Link href="/transactions/create">
               <button className="bg-blue-600 text-white px-4 py-2 hover:bg-blue-700">
                 + Tambah Transaksi
               </button>
-            </Link>
+            </Link> */}
 
             {/* Transaction Details Table */}
             <table className="w-full text-sm border shadow">
@@ -216,6 +218,14 @@ export default function TransactionsPage() {
           </div>
         </div>
       )}
+
+      <br></br>
+
+      <Link href="/transactions/create">
+        <button className="bg-blue-600 text-white px-4 py-2 hover:bg-blue-700">
+          + Tambah Transaksi
+        </button>
+      </Link>
     </div>
   );
 }
