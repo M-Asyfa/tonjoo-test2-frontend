@@ -18,7 +18,7 @@ export default function LoginPage() {
       // await API.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/sanctum/csrf-cookie`);
 
       // 2. Post login credentials
-      await API.post(`/login`, { email, password });
+      await API.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/login`, { email, password });
 
       // 3. Redirect on success
       router.push("/transactions");
