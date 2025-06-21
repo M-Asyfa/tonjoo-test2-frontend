@@ -10,7 +10,7 @@ export default function CreateTransactionPage() {
   const [form, setForm] = useState({
     description: '',
     code: '',
-    rate_euro: '',
+    rate_euro: '18000',
     date_paid: '',
     details: [
       { category_id: '', name: '', amount: '' }
@@ -50,13 +50,13 @@ export default function CreateTransactionPage() {
   // Submit the form
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      await API.post('/transactions', form);
+    try {  
+      await API.post(`/transactions`, form);
       alert('Transaksi berhasil disimpan!');
       router.push('/transactions');
     } catch (err) {
-      console.error(err);
-      alert('Something went wrong');
+      alert('Transaksi gagal disimpan!');
+      console.error('Submit error:', err);
     }
 
     console.log('Submitting:', form);

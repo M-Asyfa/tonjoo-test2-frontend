@@ -9,7 +9,7 @@ export default function TransactionsPage() {
   const [transactions, setTransactions] = useState([]);
 
   useEffect(() => {
-    API.get('/transactions')
+    API.get(`/transactions`)
       .then(res => setTransactions(res.data))
       .catch(err => console.error("Failed to load transactions", err));
   }, []);
@@ -20,17 +20,36 @@ export default function TransactionsPage() {
     router.push(`/transactions/edit/${transactionId}`);
   };
 
-  const handleDelete = async (transactionId) => {
-    const confirmed = confirm("Apakah Anda yakin ingin menghapus transaksi ini?");
-    if (!confirmed) return;
+  // const handleDelete = async (transactionId) => {
+  //   const confirmed = confirm("Apakah Anda yakin ingin menghapus transaksi ini?");
+  //   if (!confirmed) return;
+
+  //   try {
+  //     await API.delete(`/transactions/${transactionId}`);
+  //     alert("Transaksi berhasil dihapus!");
+  //     // Optionally reload data:
+  //     setTransactions((prev) => prev.filter((t) => t.id !== transactionId));
+  //   } catch (err) {
+  //     alert("Gagal menghapus transaksi.");
+  //     console.error("Delete failed:", err);
+  //   }
+  // };
+
+
+  const handleDelete = async (transactionHeaderId, detailId) => {
+    if (!confirm("Apakah Anda yakin ingin menghapus transaksi ini?")) return;
 
     try {
-      await API.delete(`/transactions/${transactionId}`);
+      await API.delete(
+        `/transactions/${transactionHeaderId}/details/${detailId}`,
+        { withCredentials: true }
+      );
       alert("Transaksi berhasil dihapus!");
-      // Optionally reload data:
-      setTransactions((prev) => prev.filter((t) => t.id !== transactionId));
-    } catch (err) {
-      console.error("Delete failed:", err);
+
+      // Optionally re-fetch the transaction list
+      fetchTransactions();
+    } catch (error) {
+      console.error("Failed to delete detail", error);
       alert("Gagal menghapus transaksi.");
     }
   };
@@ -45,6 +64,26 @@ export default function TransactionsPage() {
   });
 
   const [searchInput, setSearchInput] = useState(''); // input box only
+
+  const fetchTransactions = async () => {
+    try {
+      const res = await API.get(`/transactions`, {
+        withCredentials: true,
+      });
+      setTransactions(res.data);
+    } catch (err) {
+      console.error("Failed to fetch transactions", err);
+    }
+  };
+
+  const handleLogout = async () => {
+    try {
+      await API.post(`/logout`, {});
+      router.push("/login");
+    } catch (err) {
+      console.error("Logout failed", err);
+    }
+  };
 
   // const [debouncedSearch] = useDebounce(searchInput, 500);
 
@@ -63,6 +102,15 @@ export default function TransactionsPage() {
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-2xl font-bold">List Data Transaksi</h1>
       </div>
+
+        <div className="flex justify-end mb-4">
+          <button
+            onClick={handleLogout}
+            className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700"
+          >
+            Log out
+          </button>
+        </div>
 
       {transactions.length === 0 ? (
         <p className="text-gray-500">Tidak ada transaksi.</p>
@@ -132,25 +180,21 @@ export default function TransactionsPage() {
               </div>
             </div>
 
-            {/* <Link href="/transactions/create">
-              <button className="bg-blue-600 text-white px-4 py-2 hover:bg-blue-700">
-                + Tambah Transaksi
-              </button>
-            </Link> */}
-
-            {/* Transaction Details Table */}
+            {/* Transaction Table */}
             <table className="w-full text-sm border shadow">
               <thead className="bg-gray-300 text-gray-900 font-semibold">
                 <tr>
+                  {/* Transaction Header */}
                   <th className="p-2 text-center">No.</th>
                   <th className="p-2 text-center">Deskripsi</th>
                   <th className="p-2 text-center">Kode</th>
                   <th className="p-2 text-center">Rate Euro</th>
                   <th className="p-2 text-center">Tanggal Pembayaran</th>
-                  
+                  {/* Transaction Details */}
                   <th className="p-2 text-center">Kategori</th>
                   <th className="p-2 text-center">Nama Transaksi</th>
                   <th className="p-2 text-center">Nominal (IDR)</th>
+                  {/* Action */}
                   <th className="p-2 text-center">Aksi</th>
                 </tr>
               </thead>
@@ -198,7 +242,7 @@ export default function TransactionsPage() {
                         <td className="p-2 text-center space-x-2 flex justify-end">
                             <button
                               title="Delete" className="text-red-600 hover:text-red-800"
-                              onClick={() => handleDelete(tx.id)}
+                              onClick={() => handleDelete(tx.id, detail.id)}
                             >
                               🗑️
                             </button>
