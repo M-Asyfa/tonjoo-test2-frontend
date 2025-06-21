@@ -78,7 +78,7 @@ export default function TransactionsPage() {
 
   const handleLogout = async () => {
     try {
-      await API.post(`/logout`, {});
+      await API.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/logout`, {});
       router.push("/login");
     } catch (err) {
       console.error("Logout failed", err);
